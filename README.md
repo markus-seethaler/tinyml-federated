@@ -25,11 +25,11 @@ The implementation features:
 
 | Component | Description |
 |-----------|-------------|
-| [data-collection-client](./data-collection-client/README.md) | Arduino implementation for collecting accelerometer data from sensors |
-| [data-collection-server](./data-collection-server/README.md) | Python interface for receiving, labeling, and managing data collected from Arduino devices |
-| [federated-client](./federated-client/README.md) | Client-side implementation of federated learning algorithms for Arduino Nano 33 BLE |
-| [federated-server](./federated-server/README.md) | Server-side implementation for orchestrating federated learning, aggregating models, and communicating with clients |
-| [federated-simulation](./federated-simulation/README.md) | Simulation environment for testing federated learning approaches with virtual devices |
+| [data-collection-client](./data-collection-client) | Arduino implementation for collecting accelerometer data from sensors |
+| [data-collection-server](./data-collection-server) | Python interface for receiving, labeling, and managing data collected from Arduino devices |
+| [federated-client](./federated-client) | Client-side implementation of federated learning algorithms for Arduino Nano 33 BLE |
+| [federated-server](./federated-server) | Server-side implementation for orchestrating federated learning, aggregating models, and communicating with clients |
+| [federated-simulation](./federated-simulation) | Simulation environment for testing federated learning approaches with virtual devices |
 
 ## Getting Started
 

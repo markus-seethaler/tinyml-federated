@@ -18,6 +18,7 @@ set(SOURCES
     src/FederatedClient/FederatedClient.cpp
     src/FederatedServer/FederatedServer.cpp
     src/HPO/HyperParameterOptimizer.cpp
+    src/FederatedSimulation/FederatedSimulation.cpp
 )
 
 # Create executable

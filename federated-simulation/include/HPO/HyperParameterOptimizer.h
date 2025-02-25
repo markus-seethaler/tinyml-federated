@@ -1,83 +1,83 @@
-/**#pragma once
+#ifndef HYPER_PARAMETER_OPTIMIZER_H
+#define HYPER_PARAMETER_OPTIMIZER_H
 
 #include <vector>
-#include <array>
 #include <string>
-#include <cstdint>
+#include <memory>
+#include <limits>
+#include "DataPreprocessor/DataPreprocessor.h"
+#include "FederatedClient/FederatedClient.h"
 
-struct NetworkTopology {
-    std::vector<size_t> layers;
-    std::string to_string() const {
-        std::string result = "topology_";
-        for (size_t layer : layers) {
-            result += std::to_string(layer) + "_";
-        }
-        return result;
-    }
-};
-
-struct HyperParameters {
-    size_t samples_per_round;
+struct HyperParams {
+    std::vector<size_t> topology;
     float learning_rate;
-    NetworkTopology topology;
+    size_t samples_per_round;
     float client_fraction;
-    
-    std::string to_string() const {
-        return "spr_" + std::to_string(samples_per_round) + 
-               "_lr_" + std::to_string(learning_rate) +
-               "_cf_" + std::to_string(client_fraction) + 
-               "_" + topology.to_string();
-    }
+
+    // For tracking results
+    int rounds_to_success;
+    float final_accuracy;
+    float final_loss;
+
+    std::string to_string() const;
 };
 
-struct OptimizationResult {
-    HyperParameters params;
-    size_t rounds_to_target;
-    float final_accuracy;
-    bool reached_target;
+class SuccessTracker {
+public:
+    static constexpr size_t REQUIRED_CONSECUTIVE_ROUNDS = 20;
+    static constexpr float ACCURACY_THRESHOLD = 0.90f;
+    static constexpr float LOSS_THRESHOLD = 0.3f;
+
+    void reset();
+    bool update(int current_round, float accuracy, float loss);
+    int get_rounds_to_success() const;
+
+private:
+    size_t accuracy_streak = 0;
+    size_t loss_streak = 0;
+    int rounds_to_success = std::numeric_limits<int>::max();
 };
 
 class HyperParameterOptimizer {
 public:
-    HyperParameterOptimizer(float target_accuracy = 0.90f, 
-                           size_t max_rounds = 2000,
-                           uint32_t seed = 42)
-        : target_accuracy(target_accuracy)
-        , max_rounds(max_rounds)
-        , seed(seed) {
-        initialize_search_space();
-    }
+    HyperParameterOptimizer(const std::string& data_path = "../data", 
+                           uint32_t seed = 42);
     
-    std::vector<OptimizationResult> run_optimization();
+    // Run the optimization process
+    std::vector<HyperParams> run_optimization();
+    
+    // Set parameters for optimization
+    void set_max_rounds(int max_rounds) { max_fl_rounds = max_rounds; }
+    void set_num_clients(size_t num_clients) { num_clients = num_clients; }
+    void set_quick_search(bool quick) { quick_search = quick; }
     
 private:
-    void initialize_search_space() {
-        // Network topologies to try (input and output layers fixed)
-        topologies = {
-            NetworkTopology{{11, 35, 3}},      // Smaller network
-            NetworkTopology{{11, 50, 3}},     // Medium network
-            NetworkTopology{{11, 65, 3}},    // Larger network
-        };
-        
-        // Training samples per round
-        samples_per_round = {20, 25, 30};
-        
-        // Learning rates
-        learning_rates = {0.4f, 0.5f, 0.6f};
-        
-        // Client fractions
-        client_fractions = {0.1f, 0.2f};
-    }
+    // Generate grid of parameter combinations to test
+    std::vector<HyperParams> generate_param_grid();
     
-    OptimizationResult evaluate_parameters(const HyperParameters& params);
+    // Evaluate a single configuration
+    bool evaluate_configuration(HyperParams& params, const std::string& metrics_file = "hyperparam_metrics.csv");
     
-    float target_accuracy;
-    size_t max_rounds;
+    // Helper struct for tracking metrics during training
+    struct TrainingMetrics {
+        std::vector<std::vector<float>> predictions;
+        std::vector<std::vector<float>> targets;
+    };
+    
+    // Helper method for training clients
+    TrainingMetrics train_clients_online(
+        const std::vector<size_t>& selected_clients,
+        std::vector<std::unique_ptr<FederatedClient>>& clients,
+        std::shared_ptr<DataPreprocessor> preprocessor,
+        float learning_rate,
+        size_t samples_per_client);
+    
+    // Member variables
+    std::string data_path;
     uint32_t seed;
-    
-    // Search space
-    std::vector<NetworkTopology> topologies;
-    std::vector<size_t> samples_per_round;
-    std::vector<float> learning_rates;
-    std::vector<float> client_fractions;
-};*/
+    int max_fl_rounds = 600;
+    size_t num_clients = 100;
+    bool quick_search = false;
+};
+
+#endif // HYPER_PARAMETER_OPTIMIZER_H

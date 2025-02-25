@@ -62,12 +62,3 @@ This project is part of a master's thesis on Federated Learning for embedded sys
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
 
-## Citation
-
-If you use this code in your research, please cite:
-
-```
-Seethaler, M. (2025). TinyML-Federated: Federated Learning for Microcontrollers. 
-Master's Thesis, [University Name].
-```
-

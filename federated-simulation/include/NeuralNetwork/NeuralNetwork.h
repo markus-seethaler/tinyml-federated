@@ -22,6 +22,9 @@ public:
 
     // Getter for last outputs
     const std::vector<float>& get_last_outputs() const { return last_outputs; }
+    // In the Layer class:
+    const std::vector<float>& get_biases() const { return biases; }
+    void set_biases(const std::vector<float>& new_biases) { biases = new_biases; }
 
 private:
     std::vector<std::vector<float>> weights;  // [output_neurons][input_neurons]

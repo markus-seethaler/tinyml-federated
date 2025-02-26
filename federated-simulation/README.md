@@ -105,6 +105,8 @@ The simulation expects data in the same format as produced by the data collectio
 - A `motion_metadata.csv` file with sample metadata
 - Individual CSV files in a `motion_data` subdirectory containing accelerometer readings
 
+An example dataset is delivered with the repository.
+
 ## Output Files
 
 The simulation produces the following output files:

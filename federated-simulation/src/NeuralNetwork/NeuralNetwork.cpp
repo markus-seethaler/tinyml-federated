@@ -120,7 +120,7 @@ std::vector<float> NeuralNetwork::get_flat_weights() const {
         }
         
         // Add biases from the layer
-        const auto& biases = layer.get_biases(); // We'll need to add this getter
+        const auto& biases = layer.get_biases();
         flat_weights.insert(flat_weights.end(), biases.begin(), biases.end());
     }
     return flat_weights;
@@ -152,7 +152,7 @@ void NeuralNetwork::set_flat_weights(const std::vector<float>& weights) {
         for(size_t i = 0; i < outputs; i++) {
             layer_biases[i] = weights[offset + i];
         }
-        layer.set_biases(layer_biases); // We'll need to add this setter
+        layer.set_biases(layer_biases);
         offset += bias_count;
     }
 }

@@ -95,7 +95,19 @@ bool Communication::sendWeights(const float* weights, size_t length) {
     const size_t chunk_size = BLEConfig::CHUNK_SIZE_SEND;
     const size_t chunk_bytes = chunk_size * sizeof(float);
     
+    // Add timeout support
+    unsigned long startTime = millis();
+    const unsigned long TIMEOUT_MS = 30000; // 30 seconds timeout
+    
     while (currentSendPos < length) {
+        // Check for timeout
+        if (millis() - startTime > TIMEOUT_MS) {
+            Serial.println("Timeout occurred while sending weights");
+            currentSendPos = 0;
+            currentCommand = Command::NONE;
+            return false;
+        }
+        
         size_t floatsToSend = min(chunk_size, length - currentSendPos);
         size_t bytesToSend = floatsToSend * sizeof(float);
         
@@ -116,7 +128,6 @@ bool Communication::sendWeights(const float* weights, size_t length) {
             return false;
         }
     }
-    return false;
 }
 
 bool Communication::receiveWeights(float* buffer, size_t length) {
@@ -154,7 +165,6 @@ bool Communication::receiveWeights(float* buffer, size_t length) {
             return true;
         }
     }
-    return false;
 }
 
 bool Communication::sendPrediction(const float* probabilities, size_t length) {

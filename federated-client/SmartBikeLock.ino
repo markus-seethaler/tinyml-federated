@@ -111,6 +111,8 @@ void loop() {
             // Use Communication's tempBuffer directly
             if (NN.getWeights(bleComm.getTempBuffer(), numWeights)) {
                 bleComm.sendWeights(bleComm.getTempBuffer(), numWeights);
+            }else{
+              bleComm.resetState();
             }
             break;
           }
@@ -118,6 +120,8 @@ void loop() {
         case Command::SET_WEIGHTS: {
             if (bleComm.receiveWeights(bleComm.getTempBuffer(), NNConfig::MAX_WEIGHTS)) {                     
                 NN.updateNetworkWeights(bleComm.getTempBuffer(), NNConfig::MAX_WEIGHTS);
+            } else {
+              bleComm.resetState();
             }
             break;
           }

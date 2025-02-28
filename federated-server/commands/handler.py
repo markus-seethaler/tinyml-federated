@@ -75,21 +75,46 @@ class CommandHandler:
                 print("Failed to send GET_WEIGHTS command")
                 return None
 
-            # Wait for all weights
-            timeout = 240  # seconds
+            # Wait for all weights with improved timeout handling
+            timeout = 30.0  # seconds
             start_time = asyncio.get_event_loop().time()
+            last_update_time = start_time
+            chunk_timeout = 5.0  # seconds without new data
 
+            # Show progress updates
+            last_reported_count = 0
+            
             while len(self.received_weights) < self.total_weights:
-                if asyncio.get_event_loop().time() - start_time > timeout:
-                    print("Timeout waiting for weights")
+                current_time = asyncio.get_event_loop().time()
+                
+                # Check for overall timeout
+                if current_time - start_time > timeout:
+                    print(f"Overall timeout after {timeout} seconds")
                     return None
-                await asyncio.sleep(0.1)
+                    
+                # Check for chunk timeout (no new data for a while)
+                if current_time - last_update_time > chunk_timeout and len(self.received_weights) > 0:
+                    print(f"Timeout: No new data received for {chunk_timeout} seconds")
+                    return None
+                    
+                # Update chunk timeout if we've received new data
+                if len(self.received_weights) > last_reported_count:
+                    last_update_time = current_time
+                    last_reported_count = len(self.received_weights)
+                    
+                    # Print progress every 100 weights or so
+                    if len(self.received_weights) % 100 == 0 or len(self.received_weights) == self.total_weights:
+                        print(f"Received {len(self.received_weights)}/{self.total_weights} weights")
+                
+                await asyncio.sleep(0.1)  # Small delay to prevent busy waiting
 
+            print("Successfully received all weights")
             return np.array(self.received_weights)
 
         except Exception as e:
             print(f"Error getting weights: {str(e)}")
             return None
+
 
     async def send_weights(self, weights):
         """Send weights to the device with optimized transfer."""

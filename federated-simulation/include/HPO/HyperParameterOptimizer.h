@@ -80,4 +80,4 @@ private:
     bool quick_search = false;
 };
 
-#endif // HYPER_PARAMETER_OPTIMIZER_H
+#endif

@@ -3,7 +3,6 @@
 #include <numeric>
 #include <random>
 
-// Constructor now takes a seed parameter for reproducibility
 DataPreprocessor::DataPreprocessor(uint32_t seed) : 
     feature_min(0), 
     feature_max(1),
@@ -12,7 +11,6 @@ DataPreprocessor::DataPreprocessor(uint32_t seed) :
 }
 
 void DataPreprocessor::prepare_dataset(const std::vector<MotionSample>& samples) {
-    // Previous feature extraction and normalization code remains the same
     std::vector<TrainingSample> all_samples;
     
     for (const auto& sample : samples) {

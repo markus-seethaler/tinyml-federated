@@ -17,7 +17,7 @@ public:
     explicit DataPreprocessor(uint32_t base_seed = 42);  // Base seed for reproducibility
     // Process all samples and prepare for training
     void prepare_dataset(const std::vector<MotionSample>& samples);
-    TrainingSample get_next_training_sample(size_t client_id);  // Now requires client_id
+    TrainingSample get_next_training_sample(size_t client_id);
     void reset_sampling();
     
     // Get test set

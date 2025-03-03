@@ -4,7 +4,7 @@ project(SmartBikeLockSimulation)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Find FFTW3
+# Find FFTW3 (Has to be installed at system level)
 find_package(FFTW3 REQUIRED)
 
 # List all source files explicitly

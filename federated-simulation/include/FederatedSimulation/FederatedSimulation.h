@@ -70,4 +70,4 @@ private:
     std::string metrics_file = "federated_metrics.csv";
 };
 
-#endif // FEDERATED_SIMULATION_H
+#endif

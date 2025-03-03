@@ -21,8 +21,6 @@ bool Communication::begin() {
         Serial.println("Failed to initialize BLE!");
         return false;
     }
-    // Add after BLE.begin()
-    //BLE.setConnectionInterval(0x0006, 0x0006); // Min and max intervals, 7.5ms (0x0006 * 1.25ms)
     BLE.setLocalName(BLEConfig::DEVICE_NAME);
     BLE.setAdvertisedService(lockService);
     
@@ -95,7 +93,6 @@ bool Communication::sendWeights(const float* weights, size_t length) {
     const size_t chunk_size = BLEConfig::CHUNK_SIZE_SEND;
     const size_t chunk_bytes = chunk_size * sizeof(float);
     
-    // Add timeout support
     unsigned long startTime = millis();
     const unsigned long TIMEOUT_MS = 30000; // 30 seconds timeout
     

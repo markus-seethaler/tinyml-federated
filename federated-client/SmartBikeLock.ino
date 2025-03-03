@@ -1,6 +1,7 @@
 #include "Communication.h"
 #include "NeuralNetworkBikeLock.h"
 #include "SignalProcessing.h"
+//To have benchmarking possiblity uncomment everything with TimingBenchmark
 //#include "TimingBenchmark.h"
 
 #define DEBUG // Uncomment this line if you want debug messages

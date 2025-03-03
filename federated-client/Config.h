@@ -1,11 +1,10 @@
-// Config.h
 #ifndef CONFIG_H
 #define CONFIG_H
 
 // Neural Network Configuration
 namespace NNConfig {
     constexpr unsigned int NUM_LAYERS = 3;
-    constexpr unsigned int LAYERS[NUM_LAYERS] = {11, 60, 3};  // Changed back to 3 outputs
+    constexpr unsigned int LAYERS[NUM_LAYERS] = {11, 60, 3};
     
     constexpr float ERROR_THRESHOLD = 0.01f;
     constexpr unsigned int MAX_EPOCHS = 1000;
@@ -44,9 +43,7 @@ namespace SignalConfig {
 namespace BLEConfig {
     constexpr char DEVICE_NAME[] = "SmartBikeLock";
     constexpr char SERVICE_UUID[] = "19B10000-E8F2-537E-4F6C-D104768A1214";
-    // Original weights characteristic now only for receiving FROM Arduino
     constexpr char WEIGHTS_READ_CHAR_UUID[] = "19B10001-E8F2-537E-4F6C-D104768A1214";
-    // New characteristic for sending TO Arduino
     constexpr char WEIGHTS_WRITE_CHAR_UUID[] = "19B10005-E8F2-537E-4F6C-D104768A1214";
     constexpr char CONTROL_CHAR_UUID[] = "19B10002-E8F2-537E-4F6C-D104768A1214";
     constexpr char LABEL_CHAR_UUID[] = "19B10003-E8F2-537E-4F6C-D104768A1214";
